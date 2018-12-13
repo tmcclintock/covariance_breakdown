@@ -1,9 +1,9 @@
-import breakdown
+import covariance_breakdown as cb
 import numpy as np
 
 def test_breakdown_builds():
     C = np.identity(2)
-    b = breakdown.breakdown(C)
+    b = cb.breakdown(C)
     return
     
 def test_breakdown_exceptions():

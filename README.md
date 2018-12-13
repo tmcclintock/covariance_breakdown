@@ -14,7 +14,7 @@ Additionally, the `breakdown` tool can reconstruct a covariance (and all the oth
 ```python
 #Given a covariance matrix C
 
-from breakdown import *
+from covariance_breakdown import *
 
 C_breakdown = breakdown(C)
 

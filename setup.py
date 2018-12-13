@@ -6,6 +6,6 @@ dist = setup(name="covariance_breakdown",
              description="Tool for breaking down covariance matrices.",
              license="MIT",
              url="https://github.com/tmcclintock/covariance_breakdown",
-             packages=['breakdown'],
+             packages=['covariance_breakdown'],
              long_description=open("README.md").read()
 )
