@@ -1,2 +1,3 @@
 # covariance_breakdown
-A small package to breakdown a covariance matrix into constituent parts useful for building emulators.
+
+Constructing emulators of covariance matrices requires first breaking the matrix down into its constituent parts using a decomposition, and then rearranging diagonal and lower triangular data into a more useful form. This is a small package to do that.
