@@ -41,7 +41,8 @@ class breakdown(object):
             continue
         self.Lprime = Lprime
 
-    def reconstruct(self, D, Lprime):
+    @classmethod
+    def from_D_Lprime(cls, D, Lprime):
         """
         Reconstruct a covariance matrix from a diagonal and flattened L matrix.
         The covariance C and L matrices will be self-assigned 
@@ -62,8 +63,6 @@ class breakdown(object):
         if not (ND*(ND-1)/2 == len(Lprime)):
             raise Exception("Mismatched length:\n\tlen(Lprime) must be len(D)*(len(D)-1)/2")
         
-        self.D = D
-        self.Lprime = Lprime
         L = np.zeros((ND,ND))
         k = 0
         for i in xrange(1,ND):
@@ -72,9 +71,8 @@ class breakdown(object):
                 k+=1
                 continue
             continue
-        self.L = L
         Lfull = np.copy(L)
         for i in xrange(0, ND):
             Lfull[i,i] = D[i]
-        self.C = np.dot(Lfull, Lfull.T.conj())
-        return
+        C = np.dot(Lfull, Lfull.T.conj())
+        return cls(C)

@@ -23,6 +23,6 @@ D      = C_breakdown.D
 L      = C_breakdown.L
 Lprime = C_breakdown.Lprime
 
-C_breakdown2 = from_D_Lprime(D, Lprime)
+C_breakdown2 = breakdown.from_D_Lprime(D, Lprime)
 #Has all the same attributes as C_breakdown
 ```
