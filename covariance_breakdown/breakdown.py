@@ -31,10 +31,10 @@ class breakdown(object):
 
         #Loop over the independent elements of L and save them
         ND = len(D)
-        Lprime = np.zeros(ND*(ND-1)/2)
+        Lprime = np.zeros(int(ND*(ND-1)/2))
         k = 0
-        for i in xrange(1,ND):
-            for j in xrange(0,i):
+        for i in range(1,ND):
+            for j in range(0,i):
                 Lprime[k] = L[i,j]
                 k+=1
                 continue
@@ -60,19 +60,19 @@ class breakdown(object):
         if D.ndim > 1 or D.ndim == 0:
             raise Exception("D must be a 1D array")
         ND = len(D)
-        if not (ND*(ND-1)/2 == len(Lprime)):
+        if not int((ND*(ND-1)/2) == len(Lprime)):
             raise Exception("Mismatched length:\n\tlen(Lprime) must be len(D)*(len(D)-1)/2")
         
         L = np.zeros((ND,ND))
         k = 0
-        for i in xrange(1,ND):
-            for j in xrange(0,i):
+        for i in range(1,ND):
+            for j in range(0,i):
                 L[i,j] = Lprime[k]
                 k+=1
                 continue
             continue
         Lfull = np.copy(L)
-        for i in xrange(0, ND):
+        for i in range(0, ND):
             Lfull[i,i] = D[i]
         C = np.dot(Lfull, Lfull.T.conj())
         return cls(C)
