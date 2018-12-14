@@ -24,8 +24,11 @@ class breakdown(object):
         #Perform GCD
         #will be slow if C is large
         #in which case swap this for a better library
-        L = np.linalg.cholesky(C)
-        D = L.diagonal()
+        Lch = np.linalg.cholesky(C)
+        S = np.diag(np.diag(Lch))
+        Sinv = np.linalg.inv(S)
+        D = np.diag(np.dot(S,S))
+        L = np.dot(Lch,Sinv)
         self.D = D
         self.L = L
 
@@ -71,8 +74,7 @@ class breakdown(object):
                 k+=1
                 continue
             continue
-        Lfull = np.copy(L)
-        for i in range(0, ND):
-            Lfull[i,i] = D[i]
-        C = np.dot(Lfull, Lfull.T.conj())
+        for i in range(0,ND):
+            L[i,i] = 1.
+        C = np.dot(L,np.dot(np.diag(D),L.T))
         return cls(C)
