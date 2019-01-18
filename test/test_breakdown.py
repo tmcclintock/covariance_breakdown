@@ -45,11 +45,21 @@ def test_reconstruction():
     sizes = [2,3,4,5,10,20]
     for size in sizes:
         A = np.random.rand(size, size)
-        C = np.dot(A,A.T) #positive semi-definite matrix
+        C = np.dot(A, A.T) #positive semi-definite matrix
         b1 = cb.breakdown(C)
         D = b1.D
         Lprime = b1.Lprime
         b2 = cb.breakdown.from_D_Lprime(D,Lprime)
+        for attr in attrs:
+            a1 = getattr(b1, attr)
+            a2 = getattr(b2, attr)
+            npt.assert_array_almost_equal(a1,a2, 1e-8)
+            continue
+        #Now with diagonal unraveling
+        b1 = cb.breakdown(C, unravel_diagonally=True)
+        D = b1.D
+        Lprime = b1.Lprime
+        b2 = cb.breakdown.from_D_Lprime(D, Lprime, unravel_diagonally=True)
         for attr in attrs:
             a1 = getattr(b1, attr)
             a2 = getattr(b2, attr)

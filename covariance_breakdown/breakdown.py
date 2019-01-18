@@ -5,9 +5,11 @@ class breakdown(object):
     Take in a covariance matrix and break it down into constituent parts.
     :param C:
         2D array of a covariance matrix
+    :param unravel_diagonally:
+        boolean flag indicating how the L submatrix is unraveled (i.e. along diagonals or not)
     """
     
-    def __init__(self, C):
+    def __init__(self, C, unravel_diagonally=False):
         C = np.array(C)
 
         #Error checking
@@ -36,16 +38,19 @@ class breakdown(object):
         ND = len(D)
         Lprime = np.zeros(int(ND*(ND-1)/2))
         k = 0
-        for i in range(1,ND):
-            for j in range(0,i):
-                Lprime[k] = L[i,j]
-                k+=1
-                continue
-            continue
+        for i in range(1, ND):
+            if not unravel_diagonally:
+                for j in range(0,i):
+                    Lprime[k] = L[i, j]
+                    k+=1
+            else:
+                for j in range(0, ND-i):
+                    Lprime[k] = L[i+j, j]
+                    k+=1
         self.Lprime = Lprime
 
     @classmethod
-    def from_D_Lprime(cls, D, Lprime):
+    def from_D_Lprime(cls, D, Lprime, unravel_diagonally=False):
         """
         Reconstruct a covariance matrix from a diagonal and flattened L matrix.
         The covariance C and L matrices will be self-assigned 
@@ -55,6 +60,8 @@ class breakdown(object):
             diagonal of decomposed covariance matrix
         :param Lprime:
             flattened lower triangular matrix from decomposition
+        :param unravel_diagonally:
+            boolean flag indicating how the L submatrix is unraveled (i.e. along diagonals or not)
         :return:
             None
         """
@@ -66,15 +73,19 @@ class breakdown(object):
         if not int((ND*(ND-1)/2) == len(Lprime)):
             raise Exception("Mismatched length:\n\tlen(Lprime) must be len(D)*(len(D)-1)/2")
         
-        L = np.zeros((ND,ND))
+        L = np.zeros((ND, ND))
         k = 0
-        for i in range(1,ND):
-            for j in range(0,i):
-                L[i,j] = Lprime[k]
-                k+=1
-                continue
-            continue
-        for i in range(0,ND):
+        for i in range(1, ND):
+            if not unravel_diagonally:
+                for j in range(0, i):
+                    L[i, j] = Lprime[k]
+                    k+=1
+            else:
+                for j in range(0, ND-i):
+                    L[i+j, j] = Lprime[k]
+                    k+=1
+        
+        for i in range(0, ND):
             L[i,i] = 1.
-        C = np.dot(L,np.dot(np.diag(D),L.T))
-        return cls(C)
+        C = np.dot(L, np.dot(np.diag(D), L.T))
+        return cls(C, unravel_diagonally)
