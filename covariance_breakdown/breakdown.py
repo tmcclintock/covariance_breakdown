@@ -49,6 +49,11 @@ class breakdown(object):
                     k+=1
         self.Lprime = Lprime
 
+        #Also save the eiegenvalues and rotation matrix
+        eigenvalues, rotation_matrix = np.linalg.eig(self.C)
+        self.eigenvalues = eigenvalues
+        self.rotation_matrix = rotation_matrix
+
     @classmethod
     def from_D_Lprime(cls, D, Lprime, unravel_diagonally=False):
         """
